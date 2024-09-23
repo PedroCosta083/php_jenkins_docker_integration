@@ -27,11 +27,16 @@ pipeline {
                 }
             }
         }
-        stage('Test Docker') {
-            steps {
-                sh 'docker ps'  // ou outro comando simples
-            }
-        }
+        stages {
+                stage('Test Docker') {
+                    steps {
+                        script {
+                            def dockerVersion = sh(script: 'docker --version', returnStdout: true).trim()
+                            echo "Docker version: ${dockerVersion}"
+                            }
+                        }
+                    }
+                }
         stage('Deploy') {
             steps {
                 script {
