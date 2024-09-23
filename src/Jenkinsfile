@@ -1,10 +1,15 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'php:8.0-cli'  // ou qualquer outra versão que você precise
+            args '-v $WORKSPACE:/app' // Monta o workspace do Jenkins no container
+        }
+    }
     stages {
         stage('Install Dependencies') {
             steps {
                 script {
-                    sh 'composer install'
+                    sh 'composer install --no-interaction'
                 }
             }
         }
@@ -25,7 +30,6 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    // Aqui você pode adicionar comandos para implantar a imagem
                     echo 'Deploying...'
                 }
             }
