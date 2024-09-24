@@ -1,14 +1,17 @@
 pipeline {
-    agent {
-        docker {
-            image 'php:8.2-cli'  // ou qualquer outra versão que você precise
-            args '-v /var/run/docker.sock:/var/run/docker.sock' // Monta o workspace do Jenkins no container
-        }
-    }
+    agent any // Usar qualquer agente disponível
+
     stages {
+        stage('Checkout') {
+            steps {
+                // Verifica o repositório Git
+                git 'https://github.com/seu_usuario/seu_repositorio.git' // Substitua pela URL do seu repositório
+            }
+        }
         stage('Install Dependencies') {
             steps {
                 script {
+                    // Instala as dependências do Composer
                     sh 'composer install --no-interaction --prefer-dist'
                 }
             }
@@ -16,22 +19,8 @@ pipeline {
         stage('Run Tests') {
             steps {
                 script {
+                    // Executa os testes PHPUnit
                     sh 'vendor/bin/phpunit --log-junit tests/Results/phpunit.xml'
-                }
-            }
-        }
-        stage('Build Docker Image') {
-            steps {
-                script {
-                    dockerImage = docker.build("usuario/nome-da-imagem:${env.BUILD_ID}")
-                }
-            }
-        }
-        stage('Test Docker') {
-            steps {
-                script {
-                    def dockerVersion = sh(script: 'docker --version', returnStdout: true).trim()
-                    echo "Docker version: ${dockerVersion}"
                 }
             }
         }
@@ -39,13 +28,20 @@ pipeline {
             steps {
                 script {
                     echo 'Deploying...'
+                    // Adicione seu código de deploy aqui, se necessário
                 }
             }
         }
     }
     post {
         always {
+            // Publica os resultados dos testes
             junit 'tests/Results/*.xml'
         }
+    }
+
+    triggers {
+        // Monitora o repositório para mudanças
+        pollSCM('* * * * *') // Verifica a cada minuto, ajuste conforme necessário
     }
 }
