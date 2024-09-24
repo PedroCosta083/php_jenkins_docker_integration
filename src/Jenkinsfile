@@ -4,30 +4,32 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Especificando a branch main
-                git branch: 'main', url: 'https://github.com/PedroCosta083/php_jenkins_docker_integration.git'
+                checkout scm
             }
         }
+
         stage('Install Dependencies') {
             steps {
-                sh 'composer install' // ajuste conforme necessário
+                bat 'composer install' // Substitua por qualquer comando que você precise
             }
         }
+
         stage('Run Tests') {
             steps {
-                sh 'phpunit --testsuite=Unit' // ajuste conforme necessário
+                bat 'vendor\\bin\\phpunit' // Caminho para o PHPUnit no Windows
             }
         }
+
         stage('Publish Results') {
             steps {
-                junit 'caminho/para/seus/relatorios/*.xml' // ajuste o caminho
+                echo 'Publishing results...'
             }
         }
     }
 
     post {
         always {
-            echo 'Pipeline finished'
+            echo 'Cleaning up...'
         }
     }
 }
