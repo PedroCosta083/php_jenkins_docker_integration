@@ -2,21 +2,21 @@ pipeline {
     agent {
         docker {
             image 'php:8.0-cli'  // ou qualquer outra versão que você precise
-            args '-v $WORKSPACE:/app' // Monta o workspace do Jenkins no container
+            args '-v /var/run/docker.sock:/var/run/docker.sock' // Monta o workspace do Jenkins no container
         }
     }
     stages {
         stage('Install Dependencies') {
             steps {
                 script {
-                    sh 'composer install --no-interaction'
+                    sh 'composer install --no-interaction --prefer-dist'
                 }
             }
         }
         stage('Run Tests') {
             steps {
                 script {
-                    sh 'vendor/bin/phpunit'
+                    sh 'vendor/bin/phpunit --log-junit tests/Results/phpunit.xml'
                 }
             }
         }

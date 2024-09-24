@@ -27,6 +27,13 @@ COPY src/ .
 # Instalar dependências do Laravel
 RUN composer install
 
+# Definir permissões após instalar dependências
+RUN composer install --prefer-dist --no-scripts --no-autoloader && \
+    composer dump-autoload --optimize && \
+    chown -R www-data:www-data /var/www/vendor && \
+    chown -R www-data:www-data /var/www/.env
+
+
 # Expor a porta 9000
 EXPOSE 9000
 
