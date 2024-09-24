@@ -5,7 +5,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Verifica o repositório Git
-                git 'https://github.com/PedroCosta083/php_jenkins_docker_integration' // Substitua pela URL do seu repositório
+                git branch: 'main', url: 'https://github.com/PedroCosta083/php_jenkins_docker_integration' // Substitua pela URL do seu repositório
             }
         }
         stage('Install Dependencies') {
