@@ -11,7 +11,7 @@ pipeline {
             steps {
                 // Navega até a pasta da aplicação e executa o composer install
                 dir('src') {
-                    bat 'composer install'
+                    bat 'C:\\composer\\composer.phar install'
                 }
             }
         }
@@ -19,7 +19,7 @@ pipeline {
             steps {
                 // Navega até a pasta dos testes e executa os testes PHPUnit
                 dir('src/tests/feature/auth') {
-                    bat 'php artisan test --testsuite Feature --filter Auth'
+                    bat 'C:\\wamp64\\bin\\php\\php8.3.6\\phpunit --configuration phpunit.xml'
                 }
             }
         }
