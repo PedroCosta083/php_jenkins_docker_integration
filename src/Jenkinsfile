@@ -7,29 +7,18 @@ pipeline {
                 checkout scm
             }
         }
-
-        stages {
-            stage('Install Dependencies') {
-                steps {
-                    bat '"C:\\wamp64\\bin\\php\\php8.3.6\\php.exe" composer install'
-                }
+        stage('Install Dependencies') {
+            steps {
+                bat '"C:\\wamp64\\bin\\php\\php8.3.6\\php.exe" -r "copy(\\path\\to\\composer.phar, \'composer\');"'
+                bat 'composer install'
             }
-            // Outras etapas do pipeline
         }
-
         stage('Run Tests') {
             steps {
-                bat 'vendor\\bin\\phpunit' // Caminho para o PHPUnit no Windows
-            }
-        }
-
-        stage('Publish Results') {
-            steps {
-                echo 'Publishing results...'
+                bat 'phpunit'
             }
         }
     }
-
     post {
         always {
             echo 'Cleaning up...'
