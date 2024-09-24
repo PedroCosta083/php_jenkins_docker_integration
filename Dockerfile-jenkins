@@ -2,7 +2,7 @@ FROM jenkins/jenkins:lts
 
 USER root
 
-# Instalar o Docker
+# Instalar o Docker CLI e outras dependências
 RUN apt-get update && \
     apt-get install -y apt-transport-https \
                        ca-certificates \
@@ -12,10 +12,13 @@ RUN apt-get update && \
     curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - && \
     add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable" && \
     apt-get update && \
-    apt-get install -y docker-ce-cli
+    apt-get install -y docker-ce-cli sudo gosu
 
 # Criar o grupo docker e adicionar o jenkins ao grupo
 RUN groupadd docker && \
     usermod -aG docker jenkins
+
+# Configurar sudo para o Jenkins rodar Docker sem senha
+RUN echo "jenkins ALL=NOPASSWD: /usr/bin/docker" >> /etc/sudoers
 
 USER jenkins

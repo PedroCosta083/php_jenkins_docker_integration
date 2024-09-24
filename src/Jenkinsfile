@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image 'php:8.0-cli'  // ou qualquer outra versão que você precise
+            image 'php:8.2-cli'  // ou qualquer outra versão que você precise
             args '-v /var/run/docker.sock:/var/run/docker.sock' // Monta o workspace do Jenkins no container
         }
     }
