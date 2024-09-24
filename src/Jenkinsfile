@@ -1,21 +1,19 @@
 pipeline {
     agent any
-
     stages {
         stage('Checkout') {
             steps {
-                checkout scm
+                git 'https://github.com/PedroCosta083/php_jenkins_docker_integration.git'
             }
         }
         stage('Install Dependencies') {
             steps {
-                bat '"C:\\wamp64\\bin\\php\\php8.3.6\\php.exe" -r "copy(\\path\\to\\composer.phar, \'composer\');"'
-                bat 'composer install'
+                bat 'C:\\composer\\composer install'  // Usando o caminho do Composer corretamente
             }
         }
         stage('Run Tests') {
             steps {
-                bat 'phpunit'
+                bat 'C:\\wamp64\\bin\\php\\php8.3.6\\phpunit --configuration phpunit.xml'
             }
         }
     }
