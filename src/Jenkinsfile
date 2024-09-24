@@ -1,0 +1,47 @@
+pipeline {
+    agent any // Usar qualquer agente disponível
+
+    stages {
+        stage('Checkout') {
+            steps {
+                // Verifica o repositório Git
+                git 'https://github.com/PedroCosta083/php_jenkins_docker_integration' // Substitua pela URL do seu repositório
+            }
+        }
+        stage('Install Dependencies') {
+            steps {
+                script {
+                    // Instala as dependências do Composer
+                    sh 'composer install --no-interaction --prefer-dist'
+                }
+            }
+        }
+        stage('Run Tests') {
+            steps {
+                script {
+                    // Executa os testes PHPUnit
+                    sh 'vendor/bin/phpunit --log-junit tests/Results/phpunit.xml'
+                }
+            }
+        }
+        stage('Deploy') {
+            steps {
+                script {
+                    echo 'Deploying...'
+                    // Adicione seu código de deploy aqui, se necessário
+                }
+            }
+        }
+    }
+    post {
+        always {
+            // Publica os resultados dos testes
+            junit 'tests/Results/*.xml'
+        }
+    }
+
+    triggers {
+        // Monitora o repositório para mudanças
+        pollSCM('* * * * *') // Verifica a cada minuto, ajuste conforme necessário
+    }
+}
