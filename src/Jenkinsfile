@@ -8,10 +8,13 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
-            steps {
-                bat 'composer install' // Substitua por qualquer comando que você precise
+        stages {
+            stage('Install Dependencies') {
+                steps {
+                    bat '"C:\\wamp64\\bin\\php\\php8.3.6\\php.exe" composer install'
+                }
             }
+            // Outras etapas do pipeline
         }
 
         stage('Run Tests') {
