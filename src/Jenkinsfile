@@ -3,16 +3,19 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/PedroCosta083/php_jenkins_docker_integration.git'
+                // Verifica a branch main do repositório
+                git branch: 'main', url: 'https://github.com/PedroCosta083/php_jenkins_docker_integration.git'
             }
         }
         stage('Install Dependencies') {
             steps {
-                bat 'C:\\composer\\composer install'  // Usando o caminho do Composer corretamente
+                // Usando o caminho do Composer corretamente
+                bat 'C:\\composer\\composer install'
             }
         }
         stage('Run Tests') {
             steps {
+                // Executando os testes PHPUnit
                 bat 'C:\\wamp64\\bin\\php\\php8.3.6\\phpunit --configuration phpunit.xml'
             }
         }
